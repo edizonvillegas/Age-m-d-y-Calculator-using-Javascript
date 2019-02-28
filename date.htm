@@ -1,0 +1,84 @@
+<div id="age"></div>
+<script>
+	function getAge(date) {
+		var bday 			= 	date.split('/'),
+			today 			= 	new Date(),
+			day 			= 	today.getDate(),
+			month 			= 	today.getMonth() + 1,
+			year 			= 	today.getFullYear(),
+			totalDay 		= 	day - bday[1],
+			totalYear1 		= 	(year-1) - bday[2],
+			totalYear2 		= 	(year) - bday[2],
+			totalMonths1 	=	( (month + 12) - 1) - bday[0],
+			totalMonths2 	=	(month + 12) - bday[0],
+			result 		 	= 	'',
+			invalidBday		=	'invalid bday',
+			daySuffix		=	' day(s) old',
+			monthSuffix		=	' month(s) old, ',
+			yearSuffix		=	' year(s) old',
+			fillAge			=	document.getElementById('age');
+
+
+		if ( ! (year & 3) == 0 && ((year % 25) != 0 || (year & 15) == 0) ) {
+			if (month == 2) {
+				if (bday[1] == 29) {
+					bday[1] = 28;
+					totalDay = 0;
+				}
+			}
+		} else {
+			bday[1] = bday[1];
+		}
+
+		if (year == bday[2]) {
+			if (month >= bday[0]) {
+				if (bday[1] > day) {
+					result = invalidBday;
+				} else if (bday[1] == day) {
+					result = (month - bday[0]) + monthSuffix + ' ' + totalDay + daySuffix;
+				} else {
+					result = (month - bday[0]) + monthSuffix + ' ' + totalDay + daySuffix;
+				}
+			} else if (bday[2] > month) {
+				result = invalidBday;
+			} else {
+				result = totalMonths1 + monthSuffix;
+			}
+		} else {
+			if (month >= bday[0]) {
+				if (bday[1] > day) {
+					result = year - bday[2] + yearSuffix + ' ' + (month - bday[0]) + monthSuffix + ' 0' + daySuffix;
+				} else {
+					//result = day < bday[1] ? totalYear2  + yearSuffix : year - bday[2] + yearSuffix;
+					if (day < bday[1]) {
+						result = totalYear2  + yearSuffix;
+					} else {
+						result = year - bday[2] + yearSuffix + ' ' + (month - bday[0]) + monthSuffix + ' ' +  totalDay + daySuffix;
+					}
+				}
+			} else {
+				if (month >= bday[0]) {
+					if (bday[1] > day) {
+						result = totalYear1 + yearSuffix;
+					} else {
+						if (day < bday[1]) {
+							result = (year) - bday[2] + yearSuffix;
+						} else {
+							result = totalYear1 + yearSuffix;
+						}
+					}
+				} else {
+					if (bday[1] >= day) {
+						result = totalYear1  + yearSuffix + ' ' + totalMonths2 + monthSuffix+ ' 0' + daySuffix;
+					} else {
+						result = totalYear2  + yearSuffix + ' ' + totalMonths2 + monthSuffix + ' ' + totalDay + daySuffix;
+					}
+				}
+			}
+		}
+
+		fillAge.innerHTML = result;
+	};
+
+	getAge('02/29/2019');
+</script>
